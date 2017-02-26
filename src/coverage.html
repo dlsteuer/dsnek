@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/sendwithus/dsnek/Stack.go (66.7%)</option>
+				
+				<option value="file1">github.com/sendwithus/dsnek/game.go (84.4%)</option>
+				
+				<option value="file2">github.com/sendwithus/dsnek/handlers.go (0.0%)</option>
+				
+				<option value="file3">github.com/sendwithus/dsnek/main.go (0.0%)</option>
+				
+				<option value="file4">github.com/sendwithus/dsnek/snake.go (100.0%)</option>
+				
+				<option value="file5">github.com/sendwithus/dsnek/vector.go (90.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+type Stack []Point
+
+func (s Stack) Push(v Point) Stack <span class="cov8" title="1">{
+        return append(s, v)
+}</span>
+
+func (s Stack) Pop() (Stack, Point) <span class="cov8" title="1">{
+        l := len(s)
+        if l == 0 </span><span class="cov0" title="0">{
+                return s, Point{}
+        }</span>
+        <span class="cov8" title="1">return s[:l-1], s[l-1]</span>
+}
+
+func (s Stack) Len() int <span class="cov0" title="0">{
+        return len(s)
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
+
+import (
+        "fmt"
+        "math/rand"
+        "sort"
+)
+
+const UP = "up"
+const DOWN = "down"
+const LEFT = "left"
+const RIGHT = "right"
+const NOOP = "no-op"
+
+var directions = []string{UP, DOWN, LEFT, RIGHT}
+
+func (m MoveRequest) GenerateMove() string <span class="cov0" title="0">{
+        snake := m.MySnake()
+        foodVectors := m.GetFoodVectors()
+        if snake.HealthPoints &lt; 35 || foodVectors[0].Magnitude() &lt; 5 </span><span class="cov0" title="0">{
+                dir := m.FindMoveToNearestFood()
+                if dir != NOOP </span><span class="cov0" title="0">{
+                        return dir
+                }</span>
+        }
+
+        // Choose direction
+        <span class="cov0" title="0">for _, i := range rand.Perm(4) </span><span class="cov0" title="0">{
+                dir := directions[i]
+                if m.IsValidMove(dir) </span><span class="cov0" title="0">{
+                        return dir
+                }</span>
+        }
+        // gonna die, so doesn't matter
+        <span class="cov0" title="0">return UP</span>
+}
+
+func (m MoveRequest) GetFoodVectors() Vectors <span class="cov8" title="1">{
+        head := m.MySnake().Head()
+        vectors := Vectors{}
+        // Move to closest food
+        for _, food := range m.GetFood() </span><span class="cov8" title="1">{
+                vectors = append(vectors, head.DistanceTo(food))
+        }</span>
+
+        <span class="cov8" title="1">sort.Sort(vectors)
+        return vectors</span>
+}
+
+func (m MoveRequest) FindMoveToNearestFood() string <span class="cov8" title="1">{
+        vectors := m.GetFoodVectors()
+        for _, closestFood := range vectors </span><span class="cov8" title="1">{
+                dir := NOOP
+                if closestFood.X &lt; 0 </span><span class="cov8" title="1">{
+                        dir = LEFT
+                }</span><span class="cov8" title="1"> else if closestFood.X &gt; 0 </span><span class="cov8" title="1">{
+                        dir = RIGHT
+                }</span><span class="cov8" title="1"> else if closestFood.Y &gt; 0 </span><span class="cov8" title="1">{
+                        dir = DOWN
+                }</span><span class="cov8" title="1"> else if closestFood.Y &lt; 0 </span><span class="cov8" title="1">{
+                        dir = UP
+                }</span>
+                <span class="cov8" title="1">if m.IsValidMove(dir) </span><span class="cov8" title="1">{
+                        return dir
+                }</span>
+        }
+        <span class="cov8" title="1">return NOOP</span>
+}
+
+func (m MoveRequest) IsValidMove(dir string) bool <span class="cov8" title="1">{
+        snake := m.MySnake()
+        head := snake.Head()
+        newLocation := head.Add(dir)
+        empty := m.IsLocationEmpty(newLocation)
+        if !empty </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">blocked := m.SearchForClosedArea(newLocation)
+        return !blocked</span>
+}
+
+func (m MoveRequest) SearchForClosedArea(p Point) bool <span class="cov8" title="1">{
+        availableNodes := Points{p}
+        toSearch := Stack{}
+        toSearch = toSearch.Push(p)
+        var current Point
+
+        for </span><span class="cov8" title="1">{
+                if len(toSearch) == 0 || len(availableNodes) &gt; len(m.MySnake().Coords) </span><span class="cov8" title="1">{
+                        break</span>
+                }
+
+                <span class="cov8" title="1">toSearch, current = toSearch.Pop()
+                newNodes := m.AddNodes(current)
+                for _, node := range newNodes </span><span class="cov8" title="1">{
+                        if !availableNodes.Contains(node) </span><span class="cov8" title="1">{
+                                availableNodes = append(availableNodes, node)
+                                toSearch = toSearch.Push(node)
+                        }</span>
+                }
+        }
+
+        <span class="cov8" title="1">fmt.Println(availableNodes, len(m.MySnake().Coords))
+        return len(availableNodes) &lt; len(m.MySnake().Coords)</span>
+}
+
+func (m MoveRequest) AddNodes(p Point) []Point <span class="cov8" title="1">{
+        availableNeighbours := []Point{}
+        for _, dir := range directions </span><span class="cov8" title="1">{
+                newPoint := p.Add(dir)
+                if m.IsLocationEmpty(newPoint) </span><span class="cov8" title="1">{
+                        availableNeighbours = append(availableNeighbours, newPoint)
+                }</span>
+        }
+        <span class="cov8" title="1">return availableNeighbours</span>
+}
+
+func (m MoveRequest) IsLocationEmpty(p Point) bool <span class="cov8" title="1">{
+        if p.X &lt; 0 || p.Y &lt; 0 </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">if p.X &gt;= m.Width || p.Y &gt;= m.Height </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">for _, snake := range m.Snakes </span><span class="cov8" title="1">{
+                for _, part := range snake.GetBody() </span><span class="cov8" title="1">{
+                        if p.Equals(part) </span><span class="cov8" title="1">{
+                                return false
+                        }</span>
+                }
+        }
+
+        <span class="cov8" title="1">return true</span>
+}
+
+func (m MoveRequest) GetFood() []Point <span class="cov8" title="1">{
+        points := []Point{}
+        for _, p := range m.Food </span><span class="cov8" title="1">{
+                points = append(points, Point{p[0], p[1]})
+        }</span>
+        <span class="cov8" title="1">return points</span>
+}
+
+func (m MoveRequest) MySnake() *Snake <span class="cov8" title="1">{
+        for _, snake := range m.Snakes </span><span class="cov8" title="1">{
+                if snake.Id == m.You </span><span class="cov8" title="1">{
+                        return &amp;snake
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package main
+
+import (
+        "encoding/json"
+        "github.com/sendwithus/lib-go"
+        "log"
+        "net/http"
+)
+
+func start(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        var requestData GameStartRequest
+        json.NewDecoder(r.Body).Decode(&amp;requestData)
+
+        log.Printf("Game starting - %v\n", requestData.GameId)
+        responseData := GameStartResponse{
+                Color:   "#00FF00",
+                Name:    "dsnek",
+                HeadUrl: swu.String("https://s3.amazonaws.com/john-box-o-mysteries/swu-logo.png"),
+        }
+        b, err := json.Marshal(responseData)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("%v", err)
+                return
+        }</span>
+        <span class="cov0" title="0">w.Write(b)</span>
+}
+
+func move(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        var requestData MoveRequest
+        json.NewDecoder(r.Body).Decode(&amp;requestData)
+        responseData := MoveResponse{
+                Move: requestData.GenerateMove(),
+        }
+        log.Printf("Move request - direction:%v\n", responseData.Move)
+        b, err := json.Marshal(responseData)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("%v", err)
+                return
+        }</span>
+        <span class="cov0" title="0">w.Write(b)</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package main
+
+import (
+        "log"
+        "net/http"
+        "os"
+)
+
+func main() <span class="cov0" title="0">{
+        http.HandleFunc("/start", start)
+        http.HandleFunc("/move", move)
+        port := os.Getenv("PORT")
+        if port == "" </span><span class="cov0" title="0">{
+                port = "9001"
+        }</span>
+
+        <span class="cov0" title="0">log.Printf("Running server on port %s...\n", port)
+        http.ListenAndServe(":"+port, nil)</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package main
+
+func (s Snake) Head() Point <span class="cov8" title="1">{
+        return Point{s.Coords[0][0], s.Coords[0][1]}
+}</span>
+
+func (s Snake) GetBody() []Point <span class="cov8" title="1">{
+        parts := []Point{}
+        for _, p := range s.Coords </span><span class="cov8" title="1">{
+                parts = append(parts, Point{p[0], p[1]})
+        }</span>
+        <span class="cov8" title="1">return parts</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package main
+
+import "math"
+
+type Vectors []Vector
+type Points []Point
+
+func (l Points) Contains(search Point) bool <span class="cov8" title="1">{
+        for _, p := range l </span><span class="cov8" title="1">{
+                if p.Equals(search) </span><span class="cov8" title="1">{
+                        return true
+                }</span>
+
+        }
+        <span class="cov8" title="1">return false</span>
+}
+
+func (v Vector) Magnitude() float64 <span class="cov8" title="1">{
+        return math.Sqrt(float64((v.X * v.X) + (v.Y * v.Y)))
+}</span>
+
+func (p Point) DistanceTo(other Point) Vector <span class="cov8" title="1">{
+        return Vector{
+                X: other.X - p.X,
+                Y: other.Y - p.Y,
+        }
+}</span>
+
+func (p Point) Add(dir string) Point <span class="cov8" title="1">{
+        newLocation := p
+        if dir == UP </span><span class="cov8" title="1">{
+                newLocation.Y--
+        }</span><span class="cov8" title="1"> else if dir == DOWN </span><span class="cov8" title="1">{
+                newLocation.Y++
+        }</span><span class="cov8" title="1"> else if dir == LEFT </span><span class="cov8" title="1">{
+                newLocation.X--
+        }</span><span class="cov8" title="1"> else if dir == RIGHT </span><span class="cov8" title="1">{
+                newLocation.X++
+        }</span>
+        <span class="cov8" title="1">return newLocation</span>
+}
+
+func (p Point) Equals(other Point) bool <span class="cov8" title="1">{
+        return p.X == other.X &amp;&amp; p.Y == other.Y
+}</span>
+
+func (slice Vectors) Len() int <span class="cov8" title="1">{
+        return len(slice)
+}</span>
+
+func (slice Vectors) Less(i, j int) bool <span class="cov0" title="0">{
+        return slice[i].Magnitude() &lt; slice[j].Magnitude()
+}</span>
+
+func (slice Vectors) Swap(i, j int) <span class="cov0" title="0">{
+        slice[i], slice[j] = slice[j], slice[i]
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

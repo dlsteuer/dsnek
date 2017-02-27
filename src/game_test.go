@@ -107,12 +107,41 @@ func TestMoveRequest_AddNodes(t *testing.T) {
 					{2, 3},
 					{3, 3},
 					{3, 2},
-
 				},
 				Id: "1",
 			},
 		},
 	}
-	assert.True(t, m.SearchForClosedArea(Point{2,2}))
+	assert.True(t, m.SearchForClosedArea(Point{2, 2}))
 	assert.False(t, m.SearchForClosedArea(Point{2, 0}))
+}
+
+func TestMoveRequest_CheckForPossibleKills(t *testing.T) {
+	m := MoveRequest{
+		Width:  20,
+		Height: 20,
+		Food: [][]int{
+			{4, 1},
+		},
+		You: "1",
+		Snakes: []Snake{
+			{
+				Coords: [][]int{
+					{1, 1},
+					{1, 2},
+				},
+				Id: "1",
+			},
+			{
+				Id: "2",
+				Coords: [][]int{
+					{2, 0},
+				},
+			},
+		},
+	}
+	assert.Equal(t, UP, m.CheckForPossibleKills())
+
+	m.Snakes[1].Coords = append(m.Snakes[1].Coords, []int{2, 1})
+	assert.Equal(t, NOOP, m.CheckForPossibleKills())
 }

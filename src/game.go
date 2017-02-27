@@ -15,6 +15,12 @@ var directions = []string{UP, DOWN, LEFT, RIGHT}
 
 func (m MoveRequest) GenerateMove() string {
 	snake := m.MySnake()
+
+	dir := m.CheckForPossibleKills()
+	if dir != NOOP {
+		return dir
+	}
+
 	foodVectors := m.GetFoodVectors()
 	if snake.HealthPoints < 35 || foodVectors[0].Magnitude() < 5 {
 		dir := m.FindMoveToNearestFood()
@@ -39,6 +45,31 @@ func (m MoveRequest) GenerateMove() string {
 	}
 	// gonna die, just go up
 	return UP
+}
+
+func (m MoveRequest) CheckForPossibleKills() string {
+	head := m.MySnake().Head()
+
+	for _, dir := range directions {
+		newLocation := head.Add(dir)
+		if !m.IsLocationEmpty(newLocation) {
+			continue
+		}
+
+		for _, dir2 := range directions {
+			locationToCheck := newLocation.Add(dir2)
+			for _, snake := range m.Snakes {
+				if snake.Head().Equals(head) {
+					continue
+				}
+				if snake.Head().Equals(locationToCheck) && len(snake.Coords) < len(m.MySnake().Coords) {
+					return dir
+				}
+			}
+		}
+	}
+
+	return NOOP
 }
 
 func (m MoveRequest) GetFoodVectors() Vectors {

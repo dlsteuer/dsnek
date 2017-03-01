@@ -16,7 +16,7 @@ func start(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Game starting - %v\n", requestData.GameId)
 	responseData := GameStartResponse{
 		Color:   "#35AA47",
-		Name:    "swu-snek",
+		Name:    "dsnek",
 		HeadUrl: swu.String("https://s3.amazonaws.com/john-box-o-mysteries/swu-logo.png"),
 	}
 	b, err := json.Marshal(responseData)

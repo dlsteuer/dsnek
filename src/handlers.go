@@ -6,8 +6,12 @@ import (
 	"github.com/sendwithus/lib-go"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 )
+
+var heads = []string{"bendr", "dead", "fang", "pixel", "regular", "safe", "sand-worm", "shades", "smile", "tongue"}
+var tails = []string{"small-rattle", "skinny-tail", "round-bum", "pointed", "pixel", "freckled", "fat-rattle", "curled", "block-bum"}
 
 func start(w http.ResponseWriter, r *http.Request) {
 	var requestData GameStartRequest
@@ -15,9 +19,11 @@ func start(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Game starting - %v\n", requestData.GameId)
 	responseData := GameStartResponse{
-		Color:   "#35AA47",
-		Name:    "dsnek",
-		HeadUrl: swu.String("https://s3.amazonaws.com/john-box-o-mysteries/swu-logo.png"),
+		Color:    "#35AA47",
+		Name:     "dsnek",
+		HeadUrl:  swu.String("https://s3.amazonaws.com/john-box-o-mysteries/swu-logo.png"),
+		HeadType: swu.String(heads[rand.Intn(len(heads))]),
+		TailType: swu.String(tails[rand.Intn(len(tails))]),
 	}
 	b, err := json.Marshal(responseData)
 	if err != nil {

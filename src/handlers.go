@@ -19,9 +19,9 @@ func start(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Game starting - %v\n", requestData.GameId)
 	responseData := GameStartResponse{
-		Color:    "#35AA47",
-		Name:     "dsnek",
-		HeadUrl:  swu.String("https://s3.amazonaws.com/john-box-o-mysteries/swu-logo.png"),
+		Color:    "#00f8f8",
+		Name:     "inky-snek",
+		HeadUrl:  swu.String("https://s3.amazonaws.com/john-box-o-mysteries/pacman+ghosts/inky.png"),
 		HeadType: swu.String(heads[rand.Intn(len(heads))]),
 		TailType: swu.String(tails[rand.Intn(len(tails))]),
 	}

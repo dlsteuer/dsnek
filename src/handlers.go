@@ -6,7 +6,6 @@ import (
 	"github.com/sendwithus/lib-go"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"net/http"
 )
 

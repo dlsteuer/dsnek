@@ -56,7 +56,7 @@ func (slice Vectors) Swap(i, j int) {
 	slice[i], slice[j] = slice[j], slice[i]
 }
 
-func (v Vector) GetValidDirectionFrom(m MoveRequest) string {
+func (v Vector) GetValidDirectionFrom(m MoveRequest, validCheck bool) string {
 	dir := NOOP
 	if v.X < 0 {
 		dir = LEFT
@@ -64,14 +64,20 @@ func (v Vector) GetValidDirectionFrom(m MoveRequest) string {
 		dir = RIGHT
 	}
 
-	if m.IsValidMove(dir, true) {
-		return dir
+	if validCheck {
+		if m.IsValidMove(dir, true) {
+			return dir
+		}
 	}
 
 	if v.Y > 0 {
 		dir = DOWN
 	} else if v.Y < 0 {
 		dir = UP
+	}
+
+	if !validCheck {
+		return dir
 	}
 	if m.IsValidMove(dir, true) {
 		return dir

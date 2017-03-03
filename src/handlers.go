@@ -11,7 +11,7 @@ import (
 )
 
 var heads = []string{"bendr", "dead", "fang", "pixel", "regular", "safe", "sand-worm", "shades", "smile", "tongue"}
-var tails = []string{"small-rattle", "skinny-tail", "round-bum", "pointed", "pixel", "freckled", "fat-rattle", "curled", "block-bum"}
+var tails = []string{"small-rattle", "skinny-tail", "round-bum", "regular", "pixel", "freckled", "fat-rattle", "curled", "block-bum"}
 
 func start(w http.ResponseWriter, r *http.Request) {
 	var requestData GameStartRequest

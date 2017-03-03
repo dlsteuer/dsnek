@@ -145,3 +145,29 @@ func TestMoveRequest_CheckForPossibleKills(t *testing.T) {
 	m.Snakes[1].Coords = append(m.Snakes[1].Coords, []int{2, 1})
 	assert.Equal(t, NOOP, m.CheckForPossibleKills())
 }
+
+func TestMoveRequest_CheckNextMove(t *testing.T) {
+	m := MoveRequest{
+		Width:  20,
+		Height: 20,
+		Food: [][]int{
+			{4, 1},
+		},
+		You: "1",
+		Snakes: []Snake{
+			{
+				Coords: [][]int{
+					{1, 1},
+					{1, 2},
+				},
+				Id: "1",
+			},
+			{
+				Id: "2",
+				Coords: [][]int{
+					{2, 0},
+				},
+			},
+		},
+	}
+}

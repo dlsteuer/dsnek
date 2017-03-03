@@ -129,30 +129,7 @@ func (m MoveRequest) IsValidMove(dir string, spaceCheck bool) bool {
 
 	if spaceCheck {
 		blocked := m.SearchForClosedArea(newLocation)
-		if blocked {
-			return blocked
-		}
-		newMoveRequest := m
-		for _, snake := range newMoveRequest.Snakes {
-			if snake.Id == newMoveRequest.You {
-				continue
-			}
-			head := Point{
-				snake.Coords[0][0],
-				snake.Coords[0][1],
-			}
-			neck := Point{
-				snake.Coords[1][0],
-				snake.Coords[1][1],
-			}
-			direction := neck.DistanceTo(head)
-			dir := direction.GetValidDirectionFrom(m, false)
-			if dir != NOOP {
-				newHead := head.Add(dir)
-				snake.Coords = append([][]int{{newHead.X, newHead.Y}}, snake.Coords...)
-				return newMoveRequest.SearchForClosedArea(newLocation)
-			}
-		}
+		return !blocked
 	}
 	return empty
 }

@@ -22,8 +22,8 @@ func start(w http.ResponseWriter, r *http.Request) {
 		Color:    "#00f8f8",
 		Name:     "inky-snek",
 		HeadUrl:  swu.String("https://s3.amazonaws.com/john-box-o-mysteries/pacman+ghosts/inky.png"),
-		HeadType: swu.String(heads[rand.Intn(len(heads))]),
-		TailType: swu.String(tails[rand.Intn(len(tails))]),
+		HeadType: swu.String("fang"),
+		TailType: swu.String("pixel"),
 	}
 	b, err := json.Marshal(responseData)
 	if err != nil {

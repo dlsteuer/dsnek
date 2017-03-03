@@ -25,12 +25,12 @@ func start(w http.ResponseWriter, r *http.Request) {
 		HeadType: swu.String(heads[rand.Intn(len(heads))]),
 		TailType: swu.String(tails[rand.Intn(len(tails))]),
 	}
-	log.Println(responseData)
 	b, err := json.Marshal(responseData)
 	if err != nil {
 		log.Fatalf("%v", err)
 		return
 	}
+	fmt.Println(string(b))
 	w.Write(b)
 }
 

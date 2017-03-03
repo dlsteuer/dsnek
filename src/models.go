@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type GameStartRequest struct {
 	GameId string `json:"game_id"`
 	Height int    `json:"height"`
@@ -13,6 +15,23 @@ type GameStartResponse struct {
 	Taunt    *string `json:"taunt,omitempty"`
 	HeadType *string `json:"head_type,omitempty"`
 	TailType *string `json:"tail_type,omitempty"`
+}
+
+func DereferenceStringSafely(str *string) string {
+	if str == nil {
+		return ""
+	}
+	return *str
+}
+
+func (gsr GameStartResponse) String() string {
+	return fmt.Sprintf("Color: %v\nHeadUrl: %v\nName: %v\nTaunt: %v\nHeadType: %v\nTailType: %v\n",
+		gsr.Color,
+		DereferenceStringSafely(gsr.HeadUrl),
+		gsr.Name,
+		DereferenceStringSafely(gsr.Taunt),
+		DereferenceStringSafely(gsr.HeadType),
+		DereferenceStringSafely(gsr.TailType))
 }
 
 type MoveRequest struct {

@@ -22,7 +22,7 @@ func (m MoveRequest) GenerateMove() string {
 	}
 
 	foodVectors := m.GetFoodVectors()
-	if snake.HealthPoints < 35 || foodVectors[0].Magnitude() < 7 || len(foodVectors) <= 1 {
+	if snake.HealthPoints < 35 || foodVectors[0].Magnitude() < 4 || len(foodVectors) <= 1 {
 		dir := m.FindMoveToNearestFood()
 		if dir != NOOP {
 			return dir

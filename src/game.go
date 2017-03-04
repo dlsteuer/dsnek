@@ -142,7 +142,7 @@ func (m MoveRequest) CheckForPotentialDeath(p Point) bool {
 		check := p.Add(dir)
 		for _, snake := range m.Snakes {
 			head := snake.Head()
-			if head.Equals(check) && len(snake.Coords) > len(me.Coords) && !head.Equals(me.Head()) {
+			if head.Equals(check) && len(snake.Coords) >= len(me.Coords) && !head.Equals(me.Head()) {
 				return true
 			}
 		}

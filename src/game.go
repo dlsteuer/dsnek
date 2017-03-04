@@ -81,7 +81,9 @@ func (m MoveRequest) CheckForPossibleKills() string {
 					continue
 				}
 				if snake.Head().Equals(locationToCheck) && len(snake.Coords) < len(m.MySnake().Coords) {
-					return dir
+					if m.IsValidMove(dir, true) {
+						return dir
+					}
 				}
 			}
 		}

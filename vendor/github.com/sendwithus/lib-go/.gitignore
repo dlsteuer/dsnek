@@ -1,0 +1,9 @@
+bin/*
+pkg/*
+
+scripts/.*
+
+.idea
+*.iml
+
+coverage.html

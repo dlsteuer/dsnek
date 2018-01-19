@@ -1,1 +1,1 @@
-web: snek
+web: dsnek

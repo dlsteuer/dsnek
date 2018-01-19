@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/sendwithus/lib-go"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,6 +10,10 @@ import (
 
 var heads = []string{"bendr", "dead", "fang", "pixel", "regular", "safe", "sand-worm", "shades", "smile", "tongue"}
 var tails = []string{"small-rattle", "skinny-tail", "round-bum", "regular", "pixel", "freckled", "fat-rattle", "curled", "block-bum"}
+
+func str(str string) *string {
+	return &str
+}
 
 func start(w http.ResponseWriter, r *http.Request) {
 	var requestData GameStartRequest
@@ -20,9 +23,9 @@ func start(w http.ResponseWriter, r *http.Request) {
 	responseData := GameStartResponse{
 		Color:    "#00f8f8",
 		Name:     "inky-snek",
-		HeadUrl:  swu.String("https://s3.amazonaws.com/john-box-o-mysteries/pacman+ghosts/inky.png"),
-		HeadType: swu.String("fang"),
-		TailType: swu.String("pixel"),
+		HeadUrl:  str("https://s3.amazonaws.com/john-box-o-mysteries/pacman+ghosts/inky.png"),
+		HeadType: str("fang"),
+		TailType: str("pixel"),
 	}
 	b, err := json.Marshal(responseData)
 	if err != nil {

@@ -1,5 +1,5 @@
 package main
 
 func (s Snake) Head() Point {
-	return s.Body[0]
+	return s.Body.Data[0]
 }

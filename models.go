@@ -68,15 +68,23 @@ func (gsr GameStartResponse) String() string {
 type MoveRequest struct {
 	ID     int `json:"id"`
 	You    Snake
-	Snakes []Snake
+	Snakes SnakeList
 	Height int
 	Width  int
 	Turn   int
-	Food   []Point
+	Food   PointList
+}
+
+type SnakeList struct {
+	Data []Snake
+}
+
+type PointList struct {
+	Data []Point
 }
 
 type Snake struct {
-	Body   []Point
+	Body   PointList
 	Health int
 	ID     string `json:"id"`
 	Name   string `json:"name"`

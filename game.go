@@ -14,7 +14,7 @@ const NOOP = "no-op"
 var directions = []string{UP, DOWN, LEFT, RIGHT}
 
 func (m MoveRequest) GenerateMove() string {
-	snake := m.MySnake()
+	snake := m.You
 
 	dir := m.CheckForPossibleKills()
 	if dir != NOOP {
@@ -31,16 +31,16 @@ func (m MoveRequest) GenerateMove() string {
 
 	// try and head towards the smallest snake
 	smallestSnake := Snake{}
-	for _, snake := range m.Snakes {
-		if len(smallestSnake.Body) == 0 {
+	for _, snake := range m.Snakes.Data {
+		if len(smallestSnake.Body.Data) == 0 {
 			smallestSnake = snake
-		} else if len(smallestSnake.Body) >= len(snake.Body) {
+		} else if len(smallestSnake.Body.Data) >= len(snake.Body.Data) {
 			smallestSnake = snake
 		}
 	}
 
-	if !smallestSnake.Head().Equals(m.MySnake().Head()) {
-		directionVector := m.MySnake().Head().DistanceTo(smallestSnake.Head())
+	if !smallestSnake.Head().Equals(m.You.Head()) {
+		directionVector := m.You.Head().DistanceTo(smallestSnake.Head())
 		dir := directionVector.GetValidDirectionFrom(m, true)
 		if dir != NOOP {
 			return dir
@@ -66,7 +66,7 @@ func (m MoveRequest) GenerateMove() string {
 }
 
 func (m MoveRequest) CheckForPossibleKills() string {
-	head := m.MySnake().Head()
+	head := m.You.Head()
 
 	for _, dir := range directions {
 		newLocation := head.Add(dir)
@@ -76,11 +76,11 @@ func (m MoveRequest) CheckForPossibleKills() string {
 
 		for _, dir2 := range directions {
 			locationToCheck := newLocation.Add(dir2)
-			for _, snake := range m.Snakes {
+			for _, snake := range m.Snakes.Data {
 				if snake.Head().Equals(head) {
 					continue
 				}
-				if snake.Head().Equals(locationToCheck) && len(snake.Body) < len(m.MySnake().Body) {
+				if snake.Head().Equals(locationToCheck) && len(snake.Body.Data) < len(m.You.Body.Data) {
 					if m.IsValidMove(dir, true) {
 						return dir
 					}
@@ -93,7 +93,7 @@ func (m MoveRequest) CheckForPossibleKills() string {
 }
 
 func (m MoveRequest) GetFoodVectors() Vectors {
-	head := m.MySnake().Head()
+	head := m.You.Head()
 	vectors := Vectors{}
 	// Move to closest food
 	for _, food := range m.GetFood() {
@@ -116,7 +116,7 @@ func (m MoveRequest) FindMoveToNearestFood() string {
 }
 
 func (m MoveRequest) IsValidMove(dir string, spaceCheck bool) bool {
-	snake := m.MySnake()
+	snake := m.You
 	head := snake.Head()
 	newLocation := head.Add(dir)
 	empty := m.IsLocationEmpty(newLocation)
@@ -137,12 +137,12 @@ func (m MoveRequest) IsValidMove(dir string, spaceCheck bool) bool {
 }
 
 func (m MoveRequest) CheckForPotentialDeath(p Point) bool {
-	me := m.MySnake()
+	me := m.You
 	for _, dir := range directions {
 		check := p.Add(dir)
-		for _, snake := range m.Snakes {
+		for _, snake := range m.Snakes.Data {
 			head := snake.Head()
-			if head.Equals(check) && len(snake.Body) >= len(me.Body) && !head.Equals(me.Head()) {
+			if head.Equals(check) && len(snake.Body.Data) >= len(me.Body.Data) && !head.Equals(me.Head()) {
 				return true
 			}
 		}
@@ -157,7 +157,7 @@ func (m MoveRequest) SearchForClosedArea(p Point) bool {
 	var current Point
 
 	for {
-		if len(toSearch) == 0 || len(availableNodes) > len(m.MySnake().Body) {
+		if len(toSearch) == 0 || len(availableNodes) > len(m.You.Body.Data) {
 			break
 		}
 
@@ -171,7 +171,7 @@ func (m MoveRequest) SearchForClosedArea(p Point) bool {
 		}
 	}
 
-	return len(availableNodes) < len(m.MySnake().Body)
+	return len(availableNodes) < len(m.You.Body.Data)
 }
 
 func (m MoveRequest) AddNodes(p Point) []Point {
@@ -194,8 +194,8 @@ func (m MoveRequest) IsLocationEmpty(p Point) bool {
 		return false
 	}
 
-	for _, snake := range m.Snakes {
-		for _, part := range snake.Body {
+	for _, snake := range m.Snakes.Data {
+		for _, part := range snake.Body.Data {
 			if p.Equals(part) {
 				return false
 			}
@@ -207,17 +207,8 @@ func (m MoveRequest) IsLocationEmpty(p Point) bool {
 
 func (m MoveRequest) GetFood() []Point {
 	points := []Point{}
-	for _, p := range m.Food {
+	for _, p := range m.Food.Data {
 		points = append(points, Point{p.X, p.Y})
 	}
 	return points
-}
-
-func (m MoveRequest) MySnake() *Snake {
-	for _, snake := range m.Snakes {
-		if snake.ID == m.You.ID {
-			return &snake
-		}
-	}
-	return nil
 }

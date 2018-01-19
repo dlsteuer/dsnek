@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -32,8 +33,14 @@ func start(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("%v", err)
 		return
 	}
-	fmt.Println(string(b))
 	w.Write(b)
+}
+
+func pp(val []byte) {
+
+	var prettyJSON bytes.Buffer
+	json.Indent(&prettyJSON, val, "", "\t")
+	fmt.Println(prettyJSON.String())
 }
 
 func move(w http.ResponseWriter, r *http.Request) {

@@ -22,7 +22,7 @@ func (m MoveRequest) GenerateMove() string {
 	}
 
 	foodVectors := m.GetFoodVectors()
-	if snake.HealthPoints < 35 || foodVectors[0].Magnitude() < 4 || len(foodVectors) <= 1 {
+	if snake.Health < 35 || foodVectors[0].Magnitude() < 4 || len(foodVectors) <= 1 {
 		dir := m.FindMoveToNearestFood()
 		if dir != NOOP {
 			return dir
@@ -32,9 +32,9 @@ func (m MoveRequest) GenerateMove() string {
 	// try and head towards the smallest snake
 	smallestSnake := Snake{}
 	for _, snake := range m.Snakes {
-		if len(smallestSnake.Coords) == 0 {
+		if len(smallestSnake.Body) == 0 {
 			smallestSnake = snake
-		} else if len(smallestSnake.Coords) >= len(snake.Coords) {
+		} else if len(smallestSnake.Body) >= len(snake.Body) {
 			smallestSnake = snake
 		}
 	}
@@ -80,7 +80,7 @@ func (m MoveRequest) CheckForPossibleKills() string {
 				if snake.Head().Equals(head) {
 					continue
 				}
-				if snake.Head().Equals(locationToCheck) && len(snake.Coords) < len(m.MySnake().Coords) {
+				if snake.Head().Equals(locationToCheck) && len(snake.Body) < len(m.MySnake().Body) {
 					if m.IsValidMove(dir, true) {
 						return dir
 					}
@@ -142,7 +142,7 @@ func (m MoveRequest) CheckForPotentialDeath(p Point) bool {
 		check := p.Add(dir)
 		for _, snake := range m.Snakes {
 			head := snake.Head()
-			if head.Equals(check) && len(snake.Coords) >= len(me.Coords) && !head.Equals(me.Head()) {
+			if head.Equals(check) && len(snake.Body) >= len(me.Body) && !head.Equals(me.Head()) {
 				return true
 			}
 		}
@@ -157,7 +157,7 @@ func (m MoveRequest) SearchForClosedArea(p Point) bool {
 	var current Point
 
 	for {
-		if len(toSearch) == 0 || len(availableNodes) > len(m.MySnake().Coords) {
+		if len(toSearch) == 0 || len(availableNodes) > len(m.MySnake().Body) {
 			break
 		}
 
@@ -171,7 +171,7 @@ func (m MoveRequest) SearchForClosedArea(p Point) bool {
 		}
 	}
 
-	return len(availableNodes) < len(m.MySnake().Coords)
+	return len(availableNodes) < len(m.MySnake().Body)
 }
 
 func (m MoveRequest) AddNodes(p Point) []Point {
@@ -195,7 +195,7 @@ func (m MoveRequest) IsLocationEmpty(p Point) bool {
 	}
 
 	for _, snake := range m.Snakes {
-		for _, part := range snake.GetBody() {
+		for _, part := range snake.Body {
 			if p.Equals(part) {
 				return false
 			}
@@ -208,14 +208,14 @@ func (m MoveRequest) IsLocationEmpty(p Point) bool {
 func (m MoveRequest) GetFood() []Point {
 	points := []Point{}
 	for _, p := range m.Food {
-		points = append(points, Point{p[0], p[1]})
+		points = append(points, Point{p.X, p.Y})
 	}
 	return points
 }
 
 func (m MoveRequest) MySnake() *Snake {
 	for _, snake := range m.Snakes {
-		if snake.Id == m.You {
+		if snake.ID == m.You.ID {
 			return &snake
 		}
 	}

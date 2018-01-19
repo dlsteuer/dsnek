@@ -34,22 +34,53 @@ func (gsr GameStartResponse) String() string {
 		DereferenceStringSafely(gsr.TailType))
 }
 
+// interface Snake {
+// 	id: string;
+// 	object: 'snake';
+// 	body: List<Point>;
+// 	health: number;
+// 	taunt: string;
+// 	name: string;
+//   }
+
+//   interface List<T> {
+// 	object: 'list';
+// 	data: T[];
+//   }
+
+//   interface Point {
+// 	object: 'point';
+// 	x: number;
+// 	y: number;
+//   }
+
+//   interface World {
+// 	object: 'world';
+// 	id: number;
+// 	you: Snake;
+// 	snakes: List<Snake>;
+// 	height: number;
+// 	width: number;
+// 	turn: number;
+// 	food: List<Point>;
+//   }
+
 type MoveRequest struct {
-	Food   [][]int `json:"food"`
-	GameId string  `json:"game_id"`
-	Height int     `json:"height"`
-	Width  int     `json:"width"`
-	Turn   int     `json:"turn"`
-	Snakes []Snake `json:"snakes"`
-	You    string  `json:"you"`
+	ID     int `json:"id"`
+	You    Snake
+	Snakes []Snake
+	Height int
+	Width  int
+	Turn   int
+	Food   []Point
 }
 
 type Snake struct {
-	Coords       [][]int `json:"coords"`
-	HealthPoints int     `json:"health_points"`
-	Id           string  `json:"id"`
-	Name         string  `json:"name"`
-	Taunt        string  `json:"taunt"`
+	Body   []Point
+	Health int
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Taunt  string `json:"taunt"`
 }
 
 type MoveResponse struct {

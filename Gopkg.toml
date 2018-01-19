@@ -31,5 +31,4 @@
 
 [metadata.heroku]
   root-package = "github.com/dlsteuer/dsnek"
-  go-version = "1.9"
   install = [ "./..." ]

@@ -18,9 +18,18 @@ func str(str string) *string {
 
 func start(w http.ResponseWriter, r *http.Request) {
 	var requestData GameStartRequest
-	json.NewDecoder(r.Body).Decode(&requestData)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	err = json.Unmarshal(body, &requestData)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
-	log.Printf("Game starting - %v\n", requestData.GameId)
+	log.Printf("Game starting - %v\n", string(body))
 	responseData := GameStartResponse{
 		Color:    "#00f8f8",
 		Name:     "inky-snek",
@@ -30,7 +39,7 @@ func start(w http.ResponseWriter, r *http.Request) {
 	}
 	b, err := json.Marshal(responseData)
 	if err != nil {
-		log.Fatalf("%v", err)
+		log.Println("%v", err)
 		return
 	}
 	w.Write(b)
@@ -61,4 +70,8 @@ func move(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(b)
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("UP!"))
 }

@@ -3,9 +3,9 @@ package main
 import "fmt"
 
 type GameStartRequest struct {
-	GameId string `json:"game_id"`
-	Height int    `json:"height"`
-	Width  int    `json:"width"`
+	GameId int `json:"id"`
+	Height int `json:"height"`
+	Width  int `json:"width"`
 }
 
 type GameStartResponse struct {

@@ -51,13 +51,11 @@ func start(w http.ResponseWriter, r *http.Request) {
 
 func getColor() string {
 	funcs := []func() colorful.Color{
-		colorful.WarmColor,
-		colorful.HappyColor,
 		colorful.FastWarmColor,
 		colorful.FastHappyColor,
 	}
 
-	return funcs[rand.Intn(4)]().Hex()
+	return funcs[rand.Intn(len(funcs))]().Hex()
 }
 
 func pp(val []byte) {

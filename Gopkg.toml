@@ -32,3 +32,6 @@
 [metadata.heroku]
   root-package = "github.com/dlsteuer/dsnek"
   install = [ "./..." ]
+[[constraint]]
+  branch = "master"
+  name = "github.com/lucasb-eyer/go-colorful"

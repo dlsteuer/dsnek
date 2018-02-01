@@ -2,10 +2,28 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/corpix/uarand"
+  packages = ["."]
+  revision = "2b8494104d86337cdd41d0a49cbed8e4583c0ab4"
+
+[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
   version = "v1.1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/icrowley/fake"
+  packages = ["."]
+  revision = "e64cc2cf92049a299f359734c6ea76073f2a8b2c"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/lucasb-eyer/go-colorful"
+  packages = ["."]
+  revision = "231272389856c976b7500c4fffcc52ddf06ff4eb"
 
 [[projects]]
   name = "github.com/pmezard/go-difflib"
@@ -22,6 +40,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a9dd4821c4522b2069722c1be94b191e7aff1736aeb5c12ab0070f87cdbc5af2"
+  inputs-digest = "3f2fbbe6288d65aad490e231d42e00e9c60bd0f03eefbc5ef74fdcc397a2073c"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -6,7 +6,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
+
+	"github.com/icrowley/fake"
+	"github.com/lucasb-eyer/go-colorful"
 )
 
 var heads = []string{"bendr", "dead", "fang", "pixel", "regular", "safe", "sand-worm", "shades", "smile", "tongue"}
@@ -31,8 +35,8 @@ func start(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Game starting - %v\n", string(body))
 	responseData := GameStartResponse{
-		Color:    "#00f8f8",
-		Name:     "inky-snek",
+		Color:    getColor(),
+		Name:     fake.Word(),
 		HeadUrl:  str("https://s3.amazonaws.com/john-box-o-mysteries/pacman+ghosts/inky.png"),
 		HeadType: str("fang"),
 		TailType: str("pixel"),
@@ -43,6 +47,17 @@ func start(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(b)
+}
+
+func getColor() string {
+	funcs := []func() colorful.Color{
+		colorful.WarmColor,
+		colorful.HappyColor,
+		colorful.FastWarmColor,
+		colorful.FastHappyColor,
+	}
+
+	return funcs[rand.Intn(4)]().Hex()
 }
 
 func pp(val []byte) {

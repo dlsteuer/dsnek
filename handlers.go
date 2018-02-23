@@ -15,6 +15,14 @@ import (
 
 var heads = []string{"bendr", "dead", "fang", "pixel", "regular", "safe", "sand-worm", "shades", "smile", "tongue"}
 var tails = []string{"small-rattle", "skinny-tail", "round-bum", "regular", "pixel", "freckled", "fat-rattle", "curled", "block-bum"}
+var taunts = []string{
+	"A token of gratitude is nonsensical, much like me.",
+	"Lucky number slevin has its world rocked by trees (or rocks).",
+	"The body of mind slips on a banana peel.",
+	"Sixty-four jumps both ways.",
+	"Camouflage paint is not yet ready to die.",
+	"Organizational culture brings both pleasure and pain.",
+}
 
 func str(str string) *string {
 	return &str
@@ -27,19 +35,20 @@ func start(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+	log.Printf("Game starting - %v\n", string(body))
 	err = json.Unmarshal(body, &requestData)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	log.Printf("Game starting - %v\n", string(body))
 	responseData := GameStartResponse{
 		Color:    getColor(),
 		Name:     fake.Word(),
 		HeadUrl:  str("https://s3.amazonaws.com/john-box-o-mysteries/pacman+ghosts/inky.png"),
 		HeadType: str("fang"),
 		TailType: str("pixel"),
+		Taunt:    str(taunts[rand.Intn(len(taunts))]),
 	}
 	b, err := json.Marshal(responseData)
 	if err != nil {
@@ -70,9 +79,10 @@ func move(w http.ResponseWriter, r *http.Request) {
 	val, err := ioutil.ReadAll(r.Body)
 	json.Unmarshal(val, &requestData)
 	responseData := MoveResponse{
-		Move: requestData.GenerateMove(),
+		Move:  requestData.GenerateMove(),
+		Taunt: str(taunts[rand.Intn(len(taunts))]),
 	}
-	log.Printf("Move request - direction:%v\n", responseData.Move)
+	log.Printf("Move request - direction:%v - taunt: %v\n", responseData.Move, *responseData.Taunt)
 	if err != nil {
 		fmt.Printf("ERR: %#v\n", err)
 	}

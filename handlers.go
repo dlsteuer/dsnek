@@ -28,6 +28,15 @@ func str(str string) *string {
 	return &str
 }
 
+func end(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	log.Printf("Game end - %v\n", string(body))
+}
+
 func start(w http.ResponseWriter, r *http.Request) {
 	var requestData GameStartRequest
 	body, err := ioutil.ReadAll(r.Body)
@@ -45,7 +54,7 @@ func start(w http.ResponseWriter, r *http.Request) {
 	responseData := GameStartResponse{
 		Color:    getColor(),
 		Name:     fake.Word(),
-		HeadUrl:  str("https://s3.amazonaws.com/john-box-o-mysteries/pacman+ghosts/inky.png"),
+		HeadUrl:  str("http://lorempixel.com/50/50/cats/"),
 		HeadType: str("fang"),
 		TailType: str("pixel"),
 		Taunt:    str(taunts[rand.Intn(len(taunts))]),

@@ -84,7 +84,7 @@ func pp(val []byte) {
 }
 
 func move(w http.ResponseWriter, r *http.Request) {
-	var requestData MoveRequest
+	var requestData SnakeRequest
 	val, err := ioutil.ReadAll(r.Body)
 	json.Unmarshal(val, &requestData)
 	responseData := MoveResponse{

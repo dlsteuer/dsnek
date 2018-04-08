@@ -34,61 +34,32 @@ func (gsr GameStartResponse) String() string {
 		DereferenceStringSafely(gsr.TailType))
 }
 
-// interface Snake {
-// 	id: string;
-// 	object: 'snake';
-// 	body: List<Point>;
-// 	health: number;
-// 	taunt: string;
-// 	name: string;
-//   }
-
-//   interface List<T> {
-// 	object: 'list';
-// 	data: T[];
-//   }
-
-//   interface Point {
-// 	object: 'point';
-// 	x: number;
-// 	y: number;
-//   }
-
-//   interface World {
-// 	object: 'world';
-// 	id: number;
-// 	you: Snake;
-// 	snakes: List<Snake>;
-// 	height: number;
-// 	width: number;
-// 	turn: number;
-// 	food: List<Point>;
-//   }
-
-type MoveRequest struct {
-	ID     int `json:"id"`
-	You    Snake
-	Snakes SnakeList
-	Height int
-	Width  int
-	Turn   int
-	Food   PointList
+type SnakeRequest struct {
+	Game  Game  `json:"game"`
+	Turn  int64 `json:"turn"`
+	Board Board `json:"board"`
+	You   Snake `json:"you"`
 }
 
-type SnakeList struct {
-	Data []Snake
+// Game represents the current game state
+type Game struct {
+	ID string `json:"id"`
 }
 
-type PointList struct {
-	Data []Point
+// Board provides information about the game board
+type Board struct {
+	Height int64   `json:"height"`
+	Width  int64   `json:"width"`
+	Food   []Point `json:"food"`
+	Snakes []Snake `json:"snakes"`
 }
 
+// Snake represents information about a snake in the game
 type Snake struct {
-	Body   PointList
-	Health int
-	ID     string `json:"id"`
-	Name   string `json:"name"`
-	Taunt  string `json:"taunt"`
+	ID     string  `json:"id"`
+	Name   string  `json:"name"`
+	Health int64   `json:"health"`
+	Body   []Point `json:"body"`
 }
 
 type MoveResponse struct {
@@ -98,6 +69,6 @@ type MoveResponse struct {
 
 type Vector Point
 type Point struct {
-	X int
-	Y int
+	X int64
+	Y int64
 }

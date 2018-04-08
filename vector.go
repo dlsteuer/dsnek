@@ -56,7 +56,7 @@ func (slice Vectors) Swap(i, j int) {
 	slice[i], slice[j] = slice[j], slice[i]
 }
 
-func (v Vector) GetValidDirectionFrom(m MoveRequest, validCheck bool) string {
+func (v Vector) GetValidDirectionFrom(m SnakeRequest, validCheck bool) string {
 	dir := NOOP
 	if v.X < 0 {
 		dir = LEFT

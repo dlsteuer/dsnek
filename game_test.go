@@ -1,24 +1,28 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMoveRequest_IsValidMove(t *testing.T) {
-	m := MoveRequest{
-		Width:  20,
-		Height: 20,
-		You:    "1",
-		Snakes: []Snake{
-			{
-				Coords: [][]int{
-					{1, 1},
-					{1, 2},
-				},
-				Id: "1",
+	snake := Snake{
+		Body: []Point{
+			{X: 1, Y: 1},
+			{X: 1, Y: 2},
+		},
+		ID: "1",
+	}
+	m := SnakeRequest{
+		Board: Board{
+			Width:  20,
+			Height: 20,
+			Snakes: []Snake{
+				snake,
 			},
 		},
+		You: snake,
 	}
 
 	assert.True(t, m.IsValidMove(UP, false))
@@ -26,122 +30,134 @@ func TestMoveRequest_IsValidMove(t *testing.T) {
 	assert.True(t, m.IsValidMove(RIGHT, false))
 	assert.False(t, m.IsValidMove(DOWN, false))
 
-	m.Snakes[0].Coords[0][0] = 0
-	m.Snakes[0].Coords[0][1] = 0
+	m.Board.Snakes[0].Body[0].X = 0
+	m.Board.Snakes[0].Body[0].Y = 0
 	assert.False(t, m.IsValidMove(UP, false))
 	assert.False(t, m.IsValidMove(LEFT, false))
 
-	m.Snakes[0].Coords[0][0] = m.Width - 1
-	m.Snakes[0].Coords[0][1] = m.Height - 1
+	m.Board.Snakes[0].Body[0].X = m.Board.Width - 1
+	m.Board.Snakes[0].Body[0].Y = m.Board.Height - 1
 	assert.False(t, m.IsValidMove(DOWN, false))
 	assert.False(t, m.IsValidMove(RIGHT, false))
 }
 
 func TestMoveRequest_IsLocationEmpty(t *testing.T) {
-	m := MoveRequest{
-		Width:  20,
-		Height: 20,
-	}
-	snake := Snake{
-		Coords: [][]int{
-			{1, 1},
-			{1, 2},
+	m := SnakeRequest{
+		Board: Board{
+			Width:  20,
+			Height: 20,
 		},
 	}
-	m.Snakes = append(m.Snakes, snake)
+	snake := Snake{
+		Body: []Point{
+			{X: 1, Y: 1},
+			{X: 1, Y: 2},
+		},
+	}
+	m.Board.Snakes = append(m.Board.Snakes, snake)
 	assert.False(t, m.IsLocationEmpty(Point{1, 1}))
 	assert.True(t, m.IsLocationEmpty(Point{2, 1}))
 }
 
 func TestMoveRequest_FindMoveToNearestFood(t *testing.T) {
-	m := MoveRequest{
-		Width:  20,
-		Height: 20,
-		Food: [][]int{
-			{4, 1},
+	snake := Snake{
+		Body: []Point{
+			{X: 1, Y: 1},
+			{X: 1, Y: 2},
 		},
-		You: "1",
-		Snakes: []Snake{
-			{
-				Coords: [][]int{
-					{1, 1},
-					{1, 2},
-				},
-				Id: "1",
+		ID: "1",
+	}
+	m := SnakeRequest{
+		Board: Board{
+			Width:  20,
+			Height: 20,
+			Food: []Point{
+				{X: 4, Y: 1},
+			},
+			Snakes: []Snake{
+				snake,
 			},
 		},
+		You: snake,
 	}
 
 	move := m.FindMoveToNearestFood()
 	assert.Equal(t, RIGHT, move)
 
-	m.Food[0][0] = 0
+	m.Board.Food[0].X = 0
 	move = m.FindMoveToNearestFood()
 	assert.Equal(t, LEFT, move)
 
-	m.Food[0][0] = 1
-	m.Food[0][1] = 0
+	m.Board.Food[0].X = 1
+	m.Board.Food[0].Y = 0
 	move = m.FindMoveToNearestFood()
 	assert.Equal(t, UP, move)
 
-	m.Food[0][1] = 5
+	m.Board.Food[0].Y = 5
 	move = m.FindMoveToNearestFood()
 	assert.Equal(t, NOOP, move)
 }
 
 func TestMoveRequest_AddNodes(t *testing.T) {
-	m := MoveRequest{
-		Width:  20,
-		Height: 20,
-		Food: [][]int{
-			{4, 1},
+	snake := Snake{
+		Body: []Point{
+			{X: 2, Y: 1},
+			{X: 1, Y: 1},
+			{X: 1, Y: 2},
+			{X: 1, Y: 3},
+			{X: 2, Y: 3},
+			{X: 3, Y: 3},
+			{X: 3, Y: 2},
 		},
-		You: "1",
-		Snakes: []Snake{
-			{
-				Coords: [][]int{
-					{2, 1},
-					{1, 1},
-					{1, 2},
-					{1, 3},
-					{2, 3},
-					{3, 3},
-					{3, 2},
-				},
-				Id: "1",
+		ID: "1",
+	}
+	m := SnakeRequest{
+		Board: Board{
+			Width:  20,
+			Height: 20,
+			Food: []Point{
+				{X: 4, Y: 1},
+			},
+			Snakes: []Snake{
+				snake,
 			},
 		},
+		You: snake,
 	}
 	assert.True(t, m.SearchForClosedArea(Point{2, 2}))
 	assert.False(t, m.SearchForClosedArea(Point{2, 0}))
 }
 
 func TestMoveRequest_CheckForPossibleKills(t *testing.T) {
-	m := MoveRequest{
-		Width:  20,
-		Height: 20,
-		Food: [][]int{
-			{4, 1},
+	snake1 := Snake{
+		Body: []Point{
+			{X: 1, Y: 1},
+			{X: 1, Y: 2},
 		},
-		You: "1",
-		Snakes: []Snake{
-			{
-				Coords: [][]int{
-					{1, 1},
-					{1, 2},
-				},
-				Id: "1",
+		ID: "1",
+	}
+	snake2 := Snake{
+		ID: "2",
+		Body: []Point{
+			{X: 2, Y: 0},
+		},
+	}
+	m := SnakeRequest{
+		Board: Board{
+			Width:  20,
+			Height: 20,
+			Food: []Point{
+				{X: 4, Y: 1},
 			},
-			{
-				Id: "2",
-				Coords: [][]int{
-					{2, 0},
-				},
+			Snakes: []Snake{
+				snake1,
+				snake2,
 			},
 		},
+		You: snake1,
 	}
 	assert.Equal(t, UP, m.CheckForPossibleKills())
 
-	m.Snakes[1].Coords = append(m.Snakes[1].Coords, []int{2, 1})
+	m.Board.Snakes[1].Body = append(m.Board.Snakes[1].Body, Point{X: 2, Y: 1})
 	assert.Equal(t, NOOP, m.CheckForPossibleKills())
 }

@@ -55,8 +55,8 @@ func start(w http.ResponseWriter, r *http.Request) {
 		Color:    getColor(),
 		Name:     fake.Word(),
 		HeadUrl:  str("https://picsum.photos/50/50"),
-		HeadType: str("fang"),
-		TailType: str("pixel"),
+		HeadType: str(heads[rand.Intn(len(heads))]),
+		TailType: str(tails[rand.Intn(len(tails))]),
 		Taunt:    str(taunts[rand.Intn(len(taunts))]),
 	}
 	b, err := json.Marshal(responseData)

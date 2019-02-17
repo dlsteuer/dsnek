@@ -13,8 +13,8 @@ import (
 	"github.com/lucasb-eyer/go-colorful"
 )
 
-var heads = []string{"bendr", "dead", "fang", "pixel", "regular", "safe", "sand-worm", "shades", "smile", "tongue"}
-var tails = []string{"small-rattle", "skinny-tail", "round-bum", "regular", "pixel", "freckled", "fat-rattle", "curled", "block-bum"}
+var heads = []string{"beluga", "bendr", "dead", "evil", "fang", "pixel", "regular", "safe", "sand-worm", "shades", "silly", "smile", "tongue"}
+var tails = []string{"block-bum", "bolt", "curled", "fat-rattle", "freckled", "hook", "pixel", "regular", "round-bum", "sharp", "skinny", "small-rattle"}
 var taunts = []string{
 	"A token of gratitude is nonsensical, much like me.",
 	"Lucky number slevin has its world rocked by trees (or rocks).",

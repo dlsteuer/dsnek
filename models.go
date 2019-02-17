@@ -13,8 +13,8 @@ type GameStartResponse struct {
 	HeadUrl  *string `json:"head_url,omitempty"`
 	Name     string  `json:"name"`
 	Taunt    *string `json:"taunt,omitempty"`
-	HeadType *string `json:"head_type,omitempty"`
-	TailType *string `json:"tail_type,omitempty"`
+	HeadType *string
+	TailType *string
 }
 
 func DereferenceStringSafely(str *string) string {

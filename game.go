@@ -196,13 +196,17 @@ func (m SnakeRequest) IsLocationEmpty(p Point) bool {
 
 	for _, snake := range m.Board.Snakes {
 		for _, part := range snake.Body {
-			if p.Equals(part) {
+			if p.Equals(part) && !m.IsTeamMember(snake) {
 				return false
 			}
 		}
 	}
 
 	return true
+}
+
+func (m SnakeRequest) IsTeamMember(snake Snake) bool {
+	return m.You.Team == snake.Team && !m.You.Body[0].Equals(snake.Body[0])
 }
 
 func (m SnakeRequest) GetFood() []Point {

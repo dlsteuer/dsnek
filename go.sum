@@ -1,0 +1,9 @@
+github.com/corpix/uarand v0.0.0-20170903190822-2b8494104d86 h1:kRNlij/Yv/baHnXYdNqr+8ch5tLYAWS/VRaJ2ZvFgu0=
+github.com/corpix/uarand v0.0.0-20170903190822-2b8494104d86/go.mod h1:JSm890tOkDN+M1jqN8pUGDKnzJrsVbJwSMHBY4zwz7M=
+github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/icrowley/fake v0.0.0-20170723151011-e64cc2cf9204 h1:sDfxvavYvmIoUCpISbdKtnvT78guOnbmEOW8KrwPMK0=
+github.com/icrowley/fake v0.0.0-20170723151011-e64cc2cf9204/go.mod h1:uhpZMVGznybq1itEKXj6RYw9I71qK4kH+OGMjRC4KEo=
+github.com/lucasb-eyer/go-colorful v0.0.0-20170903184257-231272389856 h1:r+WvXmgROttp7pckv7TPN7OCUEPXmvhRklOOsL2iPPc=
+github.com/lucasb-eyer/go-colorful v0.0.0-20170903184257-231272389856/go.mod h1:NXg0ArsFk0Y01623LgUqoqcouGDB+PwCCQlrwrG6xJ4=
+github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/stretchr/testify v1.2.0/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=

@@ -89,9 +89,9 @@ func move(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(val, &requestData)
 	responseData := MoveResponse{
 		Move:  requestData.GenerateMove(),
-		Taunt: str(taunts[rand.Intn(len(taunts))]),
+		Shout: str(taunts[rand.Intn(len(taunts))]),
 	}
-	log.Printf("Move request - direction:%v - taunt: %v\n", responseData.Move, *responseData.Taunt)
+	log.Printf("Move request - direction:%v - taunt: %v\n", responseData.Move, *responseData.Shout)
 	if err != nil {
 		fmt.Printf("ERR: %#v\n", err)
 	}

@@ -60,11 +60,13 @@ type Snake struct {
 	Name   string  `json:"name"`
 	Health int64   `json:"health"`
 	Body   []Point `json:"body"`
+	Shout  string  `json:"shout"`
+	Team   string  `json:"team"`
 }
 
 type MoveResponse struct {
 	Move  string  `json:"move"`
-	Taunt *string `json:"taunt,omitempty"`
+	Shout *string `json:"shout,omitempty"`
 }
 
 type Vector Point
